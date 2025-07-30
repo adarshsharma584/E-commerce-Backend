@@ -1,0 +1,27 @@
+import dotenv from "dotenv";
+
+dotenv.config({path: "./config.env"});
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import connectDB from "./utils/dbConnect.js";
+import userRouter from "./routes/user.routes.js";
+
+connectDB();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+//Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
+
+app.get("/",(req,res)=>{
+    res.send("Our API")
+});
+//Routes
+app.use("/api/v1/users",userRouter);
+
+
+app.listen(PORT,()=>console.log(`Server running on port ${PORT}`));
