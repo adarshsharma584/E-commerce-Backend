@@ -8,9 +8,9 @@ const generateRefreshAndAccessTokens = (user)=>{
 
 const registerUser = async(req,res)=>{
     try {
-        const {fullName,email,password,role,flatNo,buildingName,street,city,state,pincode,phoneNo,country} = req.body;
+        const {fullName,email,password,role,flatNo,buildingName,street,city,state,pincode,phoneNo,country,profilePicture} = req.body;
         
-        if(!fullName || !email || !password || !role || !flatNo || !buildingName || !street || !city || !state || !pincode || !phoneNo){
+        if(!fullName || !email || !password || !role || !flatNo || !buildingName || !street || !city || !state || !pincode || !phoneNo || !country || !profilePicture){
             return res.status(400).json({message:"All fields are required"});
         }
 
@@ -33,7 +33,8 @@ const registerUser = async(req,res)=>{
                 country: country || "India",
                 pincode
             },
-            phoneNo
+            phoneNo,
+            profilePicture
         });
         
         const {refreshToken,accessToken} = generateRefreshAndAccessTokens(newUser);
@@ -55,7 +56,8 @@ const registerUser = async(req,res)=>{
                 email: newUser.email,
                 role: newUser.role,
                 address: newUser.address,
-                phoneNo: newUser.phoneNo
+                phoneNo: newUser.phoneNo,
+                profilePicture: newUser.profilePicture
             },
             accessToken
         });
@@ -93,8 +95,16 @@ const loginUser = async(req,res)=>{
 
         res.status(200).json({
             message:"User logged in successfully",
-            user:{id:existedUser._id,fullName:existedUser.fullName,email:existedUser.email,
-            role:existedUser.role,phoneNo:existedUser.phoneNo},accessToken});
+            user:
+            {
+                id:existedUser._id,
+                fullName:existedUser.fullName,
+                email:existedUser.email,
+                role:existedUser.role,
+                phoneNo:existedUser.phoneNo,
+                profilePicture:existedUser.profilePicture
+            },  
+            accessToken});
         
     } catch (error) {
         console.error("Login error:",error);
@@ -126,7 +136,14 @@ const getUserProfile = async(req,res)=>{
             return res.status(401).json({message:"Unauthorized user"});
         }
 
-        res.status(200).json({message:"User profile fetched successfully",user});
+        res.status(200).json({message:"User profile fetched successfully",user:{
+            id:user._id,
+            fullName:user.fullName,
+            email:user.email,
+            role:user.role,
+            phoneNo:user.phoneNo,
+            profilePicture:user.profilePicture
+        }});
     } catch (error) {
         console.error("Get user profile error:",error);
         res.status(500).json({message:"Internal server error"});
@@ -141,6 +158,7 @@ const updateUserProfile = async(req,res)=>{
         }
         const {fullName,email,phoneNo,profilePicture} = req.body;
         console.log(req.body);
+        
         if(!fullName || !email || !phoneNo || !profilePicture){
             return res.status(400).json({message:"All fields are required"});
         }
