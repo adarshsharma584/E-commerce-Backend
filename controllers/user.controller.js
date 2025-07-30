@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import {User} from "../models/user.model.js";
 
 const generateRefreshAndAccessTokens = (user)=>{
     const accessToken = user.generateAccessToken();
@@ -158,7 +158,7 @@ const updateUserProfile = async(req,res)=>{
         }
         const {fullName,email,phoneNo,profilePicture} = req.body;
         console.log(req.body);
-        
+
         if(!fullName || !email || !phoneNo || !profilePicture){
             return res.status(400).json({message:"All fields are required"});
         }

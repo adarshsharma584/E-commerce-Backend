@@ -1,9 +1,11 @@
 import mongoose,{Schema} from "mongoose";
 
 const productSchema = new Schema({
+   
     name:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     description:{
         type:String,
@@ -30,4 +32,4 @@ const productSchema = new Schema({
     timestamps:true
 });
 
-export default mongoose.model("Product",productSchema);
+export const Product = mongoose.model("Product",productSchema);
