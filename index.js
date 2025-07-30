@@ -22,6 +22,6 @@ app.get("/",(req,res)=>{
 });
 //Routes
 app.use("/api/v1/users",userRouter);
-
+app.use("/api/v1/products",productRouter);
 
 app.listen(PORT,()=>console.log(`Server running on port ${PORT}`));

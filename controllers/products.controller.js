@@ -34,7 +34,15 @@ const getProductByName   = async(req,res)=>{
 
 const createProduct = async(req,res)=>{
     try {
-        const {name,description,price,stock,category,images,seller} = req.body;
+        const {
+            name,
+            description,
+            price,
+            stock,
+            category,
+            images,
+            seller
+        } = req.body;
 
         if(!name || !description || !price || !stock || !category || !images || !seller){
             return res.status(400).json({message:"All fields are required"});
@@ -65,15 +73,16 @@ const createProduct = async(req,res)=>{
 const updateProduct = async(req,res)=>{
     try {
         const {name,description,price,stock,category,images,seller} = req.body;
-
-        if(!name || !description || !price || !stock || !category || !images || !seller){
+        const productId = req.params.id;
+        if(!name || !description || !price || !stock || !category || !images || !seller)
+        {
             return res.status(400).json({message:"All fields are required"});
         }
-        const product = await Product.findOne({name});
+        const product = await Product.findById(productId);
         if(!product){
             return res.status(404).json({message:"Product not found"});
         }
-        const updateProduct = await Product.findOneAndUpdate(name,{name,description,price,stock,category,images,seller},{new:true});
+        const updateProduct = await Product.findByIdAndUpdate(productId,{name,description,price,stock,category,images,seller},{new:true});
 
         if(!updateProduct){
             return res.status(404).json({message:"Product not found"});
@@ -90,11 +99,11 @@ const updateProduct = async(req,res)=>{
 
 const deleteProduct = async(req,res)=>{
     try {
-        const {name} = req.body;
-        if(!name){
-            return res.status(400).json({message:"Product name is required"});
+        const productId = req.params.id;
+        if(!productId){
+            return res.status(400).json({message:"Product ID is required"});
         }
-        const product = await Product.findOne({name});
+        const product = await Product.findById(productId);
 
         if(!product){
             return res.status(404).json({message:"Product not found"});
