@@ -1,5 +1,5 @@
 import jwt from"jsonwebtoken"
-import User from "../models/user.model.js";
+import {User} from "../models/user.model.js";
 
 const verifyJWT = (req,res,next)=>{
     const token = req.cookies?.refreshToken || req.headers?.authorization?.replace("Bearer"," ");
@@ -14,3 +14,4 @@ const verifyJWT = (req,res,next)=>{
         next();
     })
 }
+ export {verifyJWT};
